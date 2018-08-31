@@ -10,6 +10,9 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testobject.appium.junit.TestObjectTestResultWatcher;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,6 +24,10 @@ public class TestBase {
     /* Sets the test name to the name of the test method. */
     @Rule
     public TestName testName = new TestName();
+
+    /* Takes care of sending the result of the tests over to TestObject. */
+    @Rule
+    public TestObjectTestResultWatcher resultWatcher = new TestObjectTestResultWatcher();
 
     private static final String APPIUM_REMOTE_URL = "https://eu1.appium.testobject.com/wd/hub";
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
@@ -36,6 +43,11 @@ public class TestBase {
         capabilities.setCapability("testobject_api_key", API_KEY);
 
         driver = new AndroidDriver(new URL(APPIUM_REMOTE_URL), capabilities);
+
+        System.out.println(driver.getCapabilities().getCapability("testobject_test_report_url"));
+        System.out.println(driver.getCapabilities().getCapability("testobject_test_live_view_url"));
+
+        resultWatcher.setRemoteWebDriver(driver);
     }
 
     /* A simple addition, it expects the correct result to appear in the result field. */
@@ -55,12 +67,11 @@ public class TestBase {
         buttonEquals.click();
 
 		/* Check if within given time the correct result appears in the designated field. */
-//        (new WebDriverWait(driver, 30)).until(ExpectedConditions.textToBePresentInElement(resultField, EXPECTED_RESULT_FOUR));
+        (new WebDriverWait(driver, 30)).until(ExpectedConditions.textToBePresentInElement(resultField, EXPECTED_RESULT_FOUR));
 
     }
 
     @After
     public void tearDown() {
-        driver.quit();
     }
 }
