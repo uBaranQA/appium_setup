@@ -3,9 +3,7 @@ package pl.ubaranqa.appium_setup;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.*;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.openqa.selenium.By;
@@ -20,6 +18,7 @@ import java.net.URL;
 public class TestBase {
 
     private AppiumDriver driver;
+    private CalculatorMainScreen calculatorMainScreen;
 
     /* Sets the test name to the name of the test method. */
     @Rule
@@ -44,6 +43,8 @@ public class TestBase {
 
         driver = new AndroidDriver(new URL(APPIUM_REMOTE_URL), capabilities);
 
+        calculatorMainScreen = new CalculatorMainScreen(driver);
+
         System.out.println(driver.getCapabilities().getCapability("testobject_test_report_url"));
         System.out.println(driver.getCapabilities().getCapability("testobject_test_live_view_url"));
 
@@ -54,24 +55,15 @@ public class TestBase {
     @Test
     public void twoPlusTwoOperation() {
 
-		/* Get the elements. */
-        MobileElement buttonTwo = (MobileElement)(driver.findElement(By.id("com.dalviksoft.calculator:id/button2")));
-        MobileElement buttonPlus = (MobileElement)(driver.findElement(By.id("com.dalviksoft.calculator:id/buttonPlus")));
-        MobileElement buttonEquals = (MobileElement)(driver.findElement(By.id("com.dalviksoft.calculator:id/buttonEqual")));
-        MobileElement resultField = (MobileElement)(driver.findElement(By.xpath("//android.widget.EditText[1]")));
-
-		/* Add two and two. */
-        buttonTwo.click();
-        buttonPlus.click();
-        buttonTwo.click();
-        buttonEquals.click();
+        /* Add two and two. */
+        calculatorMainScreen.clickTwo();
+        calculatorMainScreen.clickPlus();
+        calculatorMainScreen.clickTwo();
+        calculatorMainScreen.clickEquals();
 
 		/* Check if within given time the correct result appears in the designated field. */
-        (new WebDriverWait(driver, 30)).until(ExpectedConditions.textToBePresentInElement(resultField, EXPECTED_RESULT_FOUR));
+        Assert.assertTrue(calculatorMainScreen.checkResult(EXPECTED_RESULT_FOUR));
 
     }
 
-    @After
-    public void tearDown() {
-    }
 }
