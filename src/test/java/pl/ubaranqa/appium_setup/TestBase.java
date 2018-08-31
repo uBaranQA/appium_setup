@@ -8,15 +8,20 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testobject.appium.junit.TestObjectTestResultWatcher;
+import org.testobject.appium.junit.TestObjectAppiumSuite;
+import org.testobject.appium.junit.TestObjectAppiumSuiteWatcher;
+import org.testobject.rest.api.appium.common.TestObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@TestObject(testObjectApiKey = "3B677A8960FD427E824BCE378F643677", testObjectSuiteId = 7)
+@RunWith(TestObjectAppiumSuite.class)
 public class TestBase {
 
     private AppiumDriver driver;
@@ -27,7 +32,7 @@ public class TestBase {
 
     /* Takes care of sending the result of the tests over to TestObject. */
     @Rule
-    public TestObjectTestResultWatcher resultWatcher = new TestObjectTestResultWatcher();
+    public TestObjectAppiumSuiteWatcher resultWatcher = new TestObjectAppiumSuiteWatcher();
 
     private static final String APPIUM_REMOTE_URL = "https://eu1.appium.testobject.com/wd/hub";
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
