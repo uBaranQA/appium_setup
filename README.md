@@ -1,1 +1,2 @@
-# appium_setup for the SauceLab mobile device cloud
+# appium_setup
+setup for the SauceLab mobile device cloud
